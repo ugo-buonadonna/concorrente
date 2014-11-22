@@ -7,7 +7,9 @@
 #include <pthread.h>
 #include <errno.h>
 
-msg_t * prelevaBloccante(buffer_t *buffer);
+msg_t * consume_blocking_signal_after(buffer_t *buffer);
+
+msg_t * consume_blocking(buffer_t *buffer);
 
 
 

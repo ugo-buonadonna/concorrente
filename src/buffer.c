@@ -48,14 +48,26 @@ msg_t* put_non_bloccante(buffer_t* buffer, msg_t* msg) {
 
 }
 msg_t* get_bloccante(buffer_t* buffer) {
-		msg_t* message;
-		sem_wait(&(buffer->piene));
-		pthread_mutex_lock(&(buffer->uso_t));
-		message = buffer->msg_array[(buffer->T) % (buffer->size)];
-		(buffer->T)++;
-		pthread_mutex_unlock(&(buffer->uso_t));
-		sem_post(&(buffer->vuote));
-		return message;
+	msg_t* message;
+	sem_wait(&(buffer->piene));
+	pthread_mutex_lock(&(buffer->uso_t));
+	message = buffer->msg_array[(buffer->T) % (buffer->size)];
+	(buffer->T)++;
+	pthread_mutex_unlock(&(buffer->uso_t));
+	sem_post(&(buffer->vuote));
+	return message;
 }
 
-msg_t* get_non_bloccante(buffer_t* buffer);
+msg_t* get_non_bloccante(buffer_t* buffer) {
+	msg_t* message;
+	if (sem_trywait(&(buffer->piene)) == -1) {
+		printf(strerror(errno));
+		return BUFFER_ERROR ;
+	}
+	pthread_mutex_lock(&(buffer->uso_t));
+	message = buffer->msg_array[(buffer->T) % (buffer->size)];
+	(buffer->T)++;
+	pthread_mutex_unlock(&(buffer->uso_t));
+	sem_post(&(buffer->vuote));
+	return message;
+}
