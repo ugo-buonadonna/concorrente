@@ -8,11 +8,11 @@
 #ifndef MAIN_SRC_CONDVAR_H_
 #define MAIN_SRC_CONDVAR_H_
 
-#include "types.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include "../../main/src/types.h"
 
 
 
@@ -29,6 +29,6 @@ void set_flag (condvar_t * ,int );
 
 void condvar_destroy(condvar_t * );
 
-int wait_flag_change(condvar_t * ,const struct timespec );
+int wait_flag_change(condvar_t * );
 
 #endif /* MAIN_SRC_CONDVAR_H_ */

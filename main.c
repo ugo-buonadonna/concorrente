@@ -19,8 +19,8 @@
 
 #include <stdio.h>
 
-#include "src/types.h"
-#include "test/testMain.h"
+#include "../main/src/types.h"
+#include "../main/test/testMain.h"
 
 
 int main()

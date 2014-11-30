@@ -5,17 +5,17 @@
  *      Author: ugo
  */
 
-#include "condvar.h"
+#include "../../main/src/condvar.h"
 
 condvar_t * condvar_init(int flag) {
 	condvar_t* new_condvar = (condvar_t*) malloc(sizeof(condvar_t));
 
 
 	// Inizializza mutex associato a variabile condizione
-	pthread_mutex_init(&(new_condvar->flag_mutex), NULL);
+	assert( pthread_mutex_init(&(new_condvar->flag_mutex), NULL) == 0);
 
 	// Inizializza variabile condizione associata a flag
-	pthread_cond_init(&(new_condvar->flag_cv), NULL);
+	assert(pthread_cond_init(&(new_condvar->flag_cv), NULL) == 0);
 
 	// Inizializza flag
 	new_condvar->flag = flag;
@@ -33,7 +33,7 @@ void set_flag (condvar_t * condvar,int flag_value) {
 	int res;
 	//printf("set_flag tid: %d",pthread_self());
 	if( (res = pthread_mutex_trylock (&(condvar->flag_mutex))) != 0)
-		printf("%d",res);
+		printf("Unable to lock mutex in set_flag: %d",res);
 
 	// cambia il valore del flag
 	condvar->flag = flag_value;
@@ -46,13 +46,13 @@ void set_flag (condvar_t * condvar,int flag_value) {
 	assert( pthread_mutex_unlock (&(condvar->flag_mutex)) ==0);
 }
 
-int wait_flag_change(condvar_t * condvar,const struct timespec abstime) {
+int wait_flag_change(condvar_t * condvar) {
 	int res;
 
 	//printf("wait_flag_change tid: %d",pthread_self());
 	pthread_mutex_lock(&(condvar->flag_mutex));
 	while (!(condvar->flag))
-		res = pthread_cond_timedwait(&(condvar->flag_cv), &(condvar->flag_mutex),&abstime);
+		res = pthread_cond_wait(&(condvar->flag_cv), &(condvar->flag_mutex));
 	pthread_mutex_unlock(&(condvar->flag_mutex));
 	return res;
 }
