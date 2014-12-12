@@ -1,0 +1,4 @@
+All' interno del file 'test/testmain.c' , nella funzione callTests() alla fine del file, sono riportate tutte le funzioni di test con annessa descrizione testuale.
+Tutti i tipi sono dichiarati nella cartella src. è presente anche un tipo 'condvar' che modella variabili condizione che ho utilizzato per sinronizzare thread.
+All'inizio di ogni funzione di test c'è una chiamata alla funzione init_suite_hwc1() che serve a reinizializzare tutte le variabili. Ho preferito inizializzare tutto al di fuori delle funzioni di testing vere e proprie per renderle più snelle e leggibili. Sono consapevole che non dealloco le variabili "vecchie" prima di inizializzarne altre.
+Per ultimo, all'interno di test_getBloccanteBufferInizialmenteVuoto() è presente una sleep() per forzare una seq. di interleaving violando la condizione di progresso finito. 

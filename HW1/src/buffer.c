@@ -1,4 +1,4 @@
-#include "../../main/src/buffer.h"
+#include "buffer.h"
 
 buffer_t* buffer_init(unsigned int maxsize) {
 	buffer_t* new_buffer = (buffer_t*) malloc(sizeof(buffer_t));

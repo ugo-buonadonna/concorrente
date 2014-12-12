@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-#include "../../main/src/types.h"
+#include "types.h"
 
 
 

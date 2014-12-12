@@ -1,4 +1,4 @@
-#include "testMain.h"
+#include "testMainHW1.h"
 
 //variabile condizione per sincronizzare threads
 condvar_t *thread_sync;
@@ -78,14 +78,13 @@ int reinit_suite_hwc1(void) {
 	init_suite_hwc1();
 }
 int clean_suite_hwc1(void) {
-	/*buffer_destroy(buffer_unitario_pieno);
+	buffer_destroy(buffer_unitario_pieno);
 	buffer_destroy(buffer_unitario_vuoto);
-	//buffer_destroy(buffer_multi_pieno);
 	free(msgs_to_insert);
 	free(msgs_retrieved);
 	free(consumers);
 	free(producers);
-	free(arguments);*/
+	free(arguments);
 
 	condvar_destroy(thread_sync);
 	return 0;
@@ -227,31 +226,6 @@ void test_piuProduzioniDiventaPieno(void) {
 	CU_ASSERT_EQUAL(get_num_messaggi(buffer_multi_vuoto),dim_buffer);
 }
 
-void test_piuConsumazioniPiuProduzioni(void) {
-	init_suite_hwc1();
-	const int produzioni = 5;
-	const int consumazioni = 4;
-	//set up
-	arguments[0] = (buffer_t*) buffer_multi_vuoto;
-	int i;
-
-		//sollecitazione (produzioni > consumazioni)
-		for (i = 0; i < produzioni; i++) {
-			arguments[1] = msgs_to_insert[i];
-			pthread_create(&producers[i], NULL, produce_non_blocking, arguments);
-			if(i<=consumazioni)
-				pthread_create(&consumers[i], NULL, consume_non_blocking_and_signal_after, arguments);
-		}
-		for (i = 0; i < produzioni; i++)
-			pthread_join(producers[i], NULL);
-		for (i = 0; i <= consumazioni; i++)
-			pthread_join(consumers[i], NULL);
-
-		//verifica
-		printf("\n%d,%d\n",get_num_messaggi(buffer_multi_vuoto),produzioni - consumazioni);
-		CU_ASSERT_EQUAL(get_num_messaggi(buffer_multi_vuoto),produzioni - consumazioni);
-}
-
 const char* callTests() {
 	CU_pSuite hwc1_suite = NULL;
 	CU_initialize_registry();
@@ -281,9 +255,6 @@ const char* callTests() {
 	CU_add_test(hwc1_suite,
 			"Produzione concorrente di molteplici messaggi in un buffer vuoto; il buffer si satura in corso",
 			test_piuProduzioniDiventaPieno);
-	CU_add_test(hwc1_suite,
-	 "Consumazioni e produzioni concorrenti in un buffer",
-	 test_piuConsumazioniPiuProduzioni);
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	CU_basic_run_tests();
 	CU_cleanup_registry();

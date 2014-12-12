@@ -1,5 +1,5 @@
-#ifndef TEST_MAIN_H
-#define TEST_MAIN_H
+#ifndef TEST_MAIN1_H
+#define TEST_MAIN1_H
 
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
@@ -8,6 +8,6 @@
 #include "../src/producer.h"
 #include "../src/types.h"
 
-const char* callTests(void);
+const char* callTestsHW1(void);
 
 #endif

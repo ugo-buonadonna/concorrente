@@ -5,7 +5,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <errno.h>
-#include "../../main/src/types.h"
+#include "types.h"
 
 void consume_blocking_and_signal_before(buffer_t *buffer);
 

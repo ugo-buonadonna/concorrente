@@ -5,7 +5,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <errno.h>
-#include "../../main/src/types.h"
+#include "types.h"
 
 void produce_blocking_signal_before(buffer_t *, msg_t* );
 void produce_blocking(buffer_t *, msg_t* );

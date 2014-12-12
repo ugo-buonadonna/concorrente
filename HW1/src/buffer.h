@@ -9,7 +9,7 @@
 #include <semaphore.h>
 #include <assert.h>
 #include <errno.h>
-#include "../../main/src/msg.h"
+#include "msg.h"
 
 typedef struct buffer {
 	unsigned int size; // grandezza del buffer
