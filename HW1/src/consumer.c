@@ -6,7 +6,7 @@
  */
 
 
-#include "../../main/src/consumer.h"
+#include "consumer.h"
 
 extern condvar_t* thread_sync;
 

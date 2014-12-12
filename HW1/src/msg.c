@@ -4,7 +4,7 @@
  *  Created on: Nov 19, 2014
  *      Author: ugo
  */
-#include "../../main/src/msg.h"
+#include "msg.h"
 
 msg_t* msg_init_string(void* content) {
 	//viene creata una copia "privata" della stringa

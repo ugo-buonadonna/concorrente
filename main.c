@@ -19,13 +19,13 @@
 
 #include <stdio.h>
 
-#include "../main/src/types.h"
-#include "../main/test/testMain.h"
+#include "HW1/src/types.h"
+#include "HW1/test/testMainHW1.h"
 
 
 int main()
 {
-	printf(callTests());
+	printf(callTestsHW1());
 	return (0);
 }
 

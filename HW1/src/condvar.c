@@ -5,7 +5,7 @@
  *      Author: ugo
  */
 
-#include "../../main/src/condvar.h"
+#include "condvar.h"
 
 condvar_t * condvar_init(int flag) {
 	condvar_t* new_condvar = (condvar_t*) malloc(sizeof(condvar_t));

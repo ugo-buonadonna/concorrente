@@ -14,10 +14,6 @@ buffer_t* buffer_init(unsigned int maxsize) {
 }
 
 void buffer_destroy(buffer_t* buffer) {
-	int i;
-	for(i=0;i<buffer->size;i++)
-		if(buffer->msg_array[i])
-			msg_destroy_string(buffer->msg_array[i]);
 	free(buffer->msg_array);
 	sem_destroy(&(buffer->vuote));
 	sem_destroy(&(buffer->piene));

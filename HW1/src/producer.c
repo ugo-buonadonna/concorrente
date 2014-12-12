@@ -6,7 +6,7 @@
  */
 
 
-#include "../../main/src/producer.h"
+#include "producer.h"
 
 
 extern condvar_t* thread_sync;

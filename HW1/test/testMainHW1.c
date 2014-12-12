@@ -226,7 +226,7 @@ void test_piuProduzioniDiventaPieno(void) {
 	CU_ASSERT_EQUAL(get_num_messaggi(buffer_multi_vuoto),dim_buffer);
 }
 
-const char* callTests() {
+const char* callTestsHWC1() {
 	CU_pSuite hwc1_suite = NULL;
 	CU_initialize_registry();
 	hwc1_suite = CU_add_suite("HWC1 Testing", init_suite_hwc1,
