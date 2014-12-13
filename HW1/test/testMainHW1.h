@@ -8,6 +8,6 @@
 #include "../src/producer.h"
 #include "../src/types.h"
 
-const char* callTestsHW1(void);
+const char* callTestsHWC1(void);
 
 #endif

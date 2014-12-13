@@ -12,7 +12,7 @@
 #include <CUnit/Basic.h>
 
 #include "../../HW1/src/types.h"
-
+#include "../src/types.h"
 const char* callTestsHW2(void);
 
 #endif /* MAIN_HW2_TEST_TESTMAINHW2_H_ */

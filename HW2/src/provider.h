@@ -10,5 +10,6 @@
 
 #include "types.h"
 
+int send_dispatcher_buf(buffer_t *,msg_t** , int );
 
 #endif /* MAIN_HW2_SRC_PROVIDER_H_ */
