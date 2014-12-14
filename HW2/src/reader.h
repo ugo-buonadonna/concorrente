@@ -10,4 +10,6 @@
 
 #include "types.h"
 
+void* read_until_ppill(void *);
+
 #endif /* MAIN_HW2_SRC_READER_H_ */

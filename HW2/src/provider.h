@@ -10,6 +10,13 @@
 
 #include "types.h"
 
-int send_dispatcher_buf(buffer_t *,msg_t** , int );
+struct send_dispatcher_buf_params {
+	buffer_t *provider_buffer;
+	msg_t** mesgs;
+	int len;
+};
+
+void* send_dispatcher_buf(void*);
+
 
 #endif /* MAIN_HW2_SRC_PROVIDER_H_ */

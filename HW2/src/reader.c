@@ -16,12 +16,13 @@ dal dispatcher
 */
 
 //Legge a velocità variabile messaggi dal reader_buffer. Ritorna il num. di messaggi letti
-int read_until_ppill(buffer_t *reader_buffer) {
-	int count;
+void* read_until_ppill(void *arg) {
+	buffer_t* reader_buffer = (buffer_t*) arg;
+	int count=0;
 	while(get_bloccante(reader_buffer) != POISON_PILL)  {
 		count++;
-		sleep(rand() % 2500);
+		sleep((rand() % 2500) / 1000); //Elemento di variabilità temporale (tra 0 e 2.5 secondi)
 	}
-	pthread_exit((int*)&count);
-	return count;
+	void* thread_return_value = (void*)count;
+	return thread_return_value;
 }

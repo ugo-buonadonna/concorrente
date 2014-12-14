@@ -14,15 +14,17 @@ provider termina spontaneamente
 */
 
 //funzione per inviare msg nel provider_buffer. Ritorna il num. di messaggi inviati.
-int send_dispatcher_buf(buffer_t *provider_buffer,msg_t** mesgs, int len) {
+void *send_dispatcher_buf(void* arg) {
+	struct send_dispatcher_buf_params *p = (struct send_dispatcher_buf_params*) arg;
+
 	int i,count=0;
-	for(i=0;i<len;i++) {
-		if( put_non_bloccante(provider_buffer,mesgs[i]) != BUFFER_ERROR)
+	for(i=0;i<p->len;i++) {
+		if( put_non_bloccante(p->provider_buffer,p->mesgs[i]) != BUFFER_ERROR)
 			count++;
 	}
-	if( put_non_bloccante(provider_buffer,POISON_PILL)!= BUFFER_ERROR)
+	if( put_non_bloccante(p->provider_buffer,POISON_PILL)!= BUFFER_ERROR)
 		count++;
 	//printf("Provider sent %d messages",count);
-	pthread_exit((int*)&count);
-	return count;
+	void* thread_return_value = (void*)count;
+	return thread_return_value;
 }

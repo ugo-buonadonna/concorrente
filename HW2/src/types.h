@@ -9,5 +9,8 @@
 
 #include "../../HW1/src/types.h"
 #include "poison_pill.h"
+#include "reader.h"
+#include "provider.h"
+#include "../hwc2list/list.h"
 
 #endif
