@@ -7,12 +7,15 @@
 
 #include "accepter.h"
 
-void submitRequest(buffer_t *requests, char name[]);
-
-void *accept_requests(buffer_t *accepted_buffer) {
+//Avvio di un fde reader. Finchè non riceve una poison pill, crea flussi reader.
+void *start_accepter(void* args) {
+	struct start_accepter_params *p =  (struct start_accepter_params*) args;
 	msg_t* current;
-	while ((current = get_bloccante(accepted_buffer)) != POISON_PILL) {
-
+	while ((current = get_bloccante(p->accepter_buffer)) != POISON_PILL) {
+		create_reader(p->current_readers);
 	}
+	//received poison pill
+	printf("Accepter got poison pill, terminating...");
+	return NULL;
 }
 

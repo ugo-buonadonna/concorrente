@@ -13,6 +13,12 @@
 
 #include "../../HW1/src/types.h"
 #include "../src/types.h"
+#include "testReader.h"
+#include "testProvider.h"
+#include "testAccepter.h"
+#include "testDispatcher.h"
+#include "testReaderHandler.h"
+
 const char* callTestsHW2(void);
 
 #endif /* MAIN_HW2_TEST_TESTMAINHW2_H_ */

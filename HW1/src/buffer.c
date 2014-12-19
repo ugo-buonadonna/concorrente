@@ -85,3 +85,14 @@ int get_num_messaggi(buffer_t * buffer)
 	pthread_mutex_unlock(&(buffer->uso_t));
 	return num;
 }
+
+//Inserisce N messaggi in un buffer in modo non bloccante.
+//Ritorna il num. di messaggi inseriti
+int put_N_non_bloccante(int num, buffer_t* buffer, msg_t ** msgs) {
+	int i,inserted=0;
+	for(i=0;i<num;i++) {
+		if(put_non_bloccante(buffer,msgs[i]) != BUFFER_ERROR)
+			inserted++;
+	}
+	return inserted;
+}

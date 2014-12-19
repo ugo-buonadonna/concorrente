@@ -9,10 +9,13 @@
 #define MAIN_HW2_SRC_ACCEPTER_H_
 
 #include "types.h"
-
-struct accept_requests_params {
-	buffer_t *accepted_buffer;
-
+struct start_accepter_params {
+	buffer_t *accepter_buffer;
+	s_list *current_readers;
 };
+
+void *start_accepter(void*);
+
+
 
 #endif /* MAIN_HW2_SRC_ACCEPTER_H_ */

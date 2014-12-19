@@ -5,47 +5,55 @@
  *      Author: ugo
  */
 
-#ifndef SAFE_LIST_H_
-#define SAFE_LIST_H_
+#include "safe_list.h"
 
-#include <pthread.h>
+s_list* safe_list_init(void) {
+	s_list* new_list = (s_list*)malloc(sizeof(s_list));
+	new_list->list = list_init();
+	if(pthread_mutex_init(&(new_list->uso_list),NULL) != 0)
+		perror("Error inizializing safe_list mutex");
+	new_list->init = safe_list_init;
+	new_list->destroy = safe_list_destroy;
+	return new_list;
+}
 
-//nodo di lista
-typedef struct list {
-	void* payload;	   // oggetto nella lista
-	struct list* next; // elemento successivo
-} list_node_t;
+void safe_list_destroy(s_list* list) {
+	pthread_mutex_destroy(&(list->uso_list));
+	list_destroy(list->list);
+	free(list);
+}
+int lock_list(s_list* list) {
+	int res = pthread_mutex_lock(&(list->uso_list));
+	if (res != 0)
+		perror("Error while locking list:");
+	return res;
+}
 
-/* lista semplicemente collegata di strutture list_node_t
- * Gli iteratori conoscono la lista, ma la lista non conosce
- * i suoi iteratori. Alcuni controlli relativi omessi per semplicità
- */
-typedef struct {
-	list_node_t* head;
-	list_node_t* tail;
-} list_t;
+int unlock_list(s_list* list) {
+	int res = pthread_mutex_unlock(&(list->uso_list));
+	if (res != 0)
+		perror("Error while unlocking list: %d",errno);
+	return res;
+}
 
-// iterator
-typedef struct {
-	list_t* list;
-	list_node_t* currentNode;
-} iterator_t;
+void safeAddElement(s_list* list, void* element) {
+	assert(lock_list(list) == 0);
+	addElement(list->list,element);
+	if(unlock_list(list))
+		perror("Error while unlocking safe list(add)");
 
-// Gli elementi contengono generici puntatori a void (void *)
+}
 
-//N.B. Gli elementi non possono essere NULL
-list_t* list_init();             // crea una lista vuota
-void list_destroy(list_t* list); // dealloca la struttura lista (non i contenuti)
-int size(list_t* list);          // restituisce il numero di elementi
-int isEmpty(list_t* list);       // restituisce vero sse vuota
+int safeRemoveElement(s_list* list, void* element) {
+	int res;
+	res = lock_list(list);
+	if (res != 0) {
+			perror("Error while locking safe list(remove):");
+			return res;
+	}
+	res = removeElement(list->list,element);
+	if(unlock_list(list))
+		perror("Error while unlocking safe list(remove)");
+	return res;
 
-void  addElement(list_t* list, void* element);  // aggiunge in fondo un elemento
-int removeElement(list_t* list, void* element); // rimuove un elemento dalla lista
-// si sceglie l'elemento di indirizzo element; restituisce false se inesistente
-iterator_t* iterator_init(list_t* list); // crea un iteratore sulla lista
-void iterator_destroy(iterator_t* it); // dealloca un iteratore
-int hasNext(iterator_t* it); // iterazione finita?
-void *next(iterator_t* it);  // prossimo elemento, NULL se finiti
-
-
-#endif /* SAFE_LIST_H_ */
+}
