@@ -103,6 +103,8 @@ const char* callTestsHWC2() {
 			test_start_dispatcher_1msg1reader);
 	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader",
 				test_start_dispatcher_2msg1reader);
+	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader Lento",
+			test_start_dispatcher_1readerLento_2messaggi);
 
 	//FLUSSO PRINCIPALE
 	CU_add_test(hwc2_suite, "invio poison pill all'accepter dopo terminazione provider",

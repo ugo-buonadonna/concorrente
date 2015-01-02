@@ -42,23 +42,21 @@ void test_start_all_1ppillToAccepter(void) {
 
 
 void init_start_all_1ppillToReader(void)  {
-	msg_array = (msg_t**)malloc(sizeof(msg_t*)*2);
-	msg_array[0] = POISON_PILL;
-	main_fde = main_fde_init(msg_array,1);
+	msg_array = init_msgs(1);
+	msg_array[1] = POISON_PILL;
+	main_fde = main_fde_init(msg_array,2);
 
 }
 void clean_start_all_1ppillToReader(void)  {
-	free(msg_array);
+	free_msgs(msg_array,1);
 	main_fde_destroy(main_fde);
 }
 void test_start_all_1ppillToReader(void) {
 	init_start_all_1ppillToReader();
 
 	int ppills_sent = start_main_fde(main_fde);
-	wait_flag_value(main_fde->test_signal,1);
 
-	//Test passato, so con certezza che ha inviato la ppill all'accepter
-	CU_PASS();
+
 
 	clean_start_all_1ppillToReader();
 }

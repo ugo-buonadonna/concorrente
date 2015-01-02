@@ -20,8 +20,6 @@ void create_reader(void* reader_list) {
 	pthread_attr_destroy (&attr);
 }
 
-
-
 int start_reader_handler(void* reader_list) {
 	//inzializzo la struttura dati che rappresenta un reader.
 	//E la inserisco nella lista dei reader correnti
@@ -49,5 +47,6 @@ int start_reader_handler(void* reader_list) {
 		inc_flag(reader_handler_started);
 	return count;
 }
+
 
 

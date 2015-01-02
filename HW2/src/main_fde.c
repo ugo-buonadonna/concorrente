@@ -7,7 +7,7 @@
 
 #include "main_fde.h"
 
-
+#define NANO_SECOND_MULTIPLIER  1000000
 
 main_fde_t* main_fde_init(msg_t** provider_msgs,int len) {
 	main_fde_t* new_main = (main_fde_t*)malloc(sizeof(main_fde_t));
@@ -73,6 +73,7 @@ void* start_main_fde (void* arg) {
 	lock_list(main->current_readers);
 	iterator_t* it = iterator_init(main->current_readers->list);
 	int count = copy_and_send_to_all(1,it,POISON_PILL);
+
 	iterator_destroy(it);
 	unlock_list(main->current_readers);
 

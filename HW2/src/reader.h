@@ -20,6 +20,8 @@ typedef struct  {
 	buffer_t *reader_buffer;
 } reader_fde;
 
+
+
 reader_fde * init_reader_fde(pthread_t);
 void destroy_reader_fde(reader_fde *);
 

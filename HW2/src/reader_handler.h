@@ -14,7 +14,6 @@
 //Insieme a un flag per utilizzarla o no (la uso solo quando testo specifici casi)
 extern condvar_t* reader_handler_started;
 
-
 void create_reader(void* args);
 int start_reader_handler(void* args);
 

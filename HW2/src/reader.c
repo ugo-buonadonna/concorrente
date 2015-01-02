@@ -8,6 +8,8 @@
 #include "reader.h"
 #include "../../HW1/src/types.h"
 
+
+#define NANO_SECOND_MULTIPLIER  1000000
 /*
 i reader sono creati a seguito di esplicite richieste asincrone presentate
 al flusso accepter e quindi collocati all’interno della Lista dei reader; so-
@@ -33,10 +35,17 @@ void destroy_reader_fde(reader_fde* reader) {
 //Legge a velocità variabile messaggi dal reader_buffer. Ritorna il num. di messaggi letti
 int start_reader(buffer_t* reader_buffer) {
 	int count=0;
+	struct timespec tim, tim2;
 	while(get_bloccante(reader_buffer) != POISON_PILL)  {
 		count++;
-		sleep((rand() % 2500) / 1000); //Elemento di variabilità temporale (tra 0 e 2.5 secondi)
+		tim.tv_sec = 1;
+		tim.tv_nsec = (rand() % 1000) * NANO_SECOND_MULTIPLIER ;
+		nanosleep(&tim , &tim2);//Elemento di variabilità temporale (tra 0 e 2 sec.)
 	}
 	printf("-Reader poisoned-");
 	return count;
 }
+
+
+
+
