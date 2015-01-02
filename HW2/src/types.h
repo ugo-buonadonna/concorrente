@@ -16,6 +16,7 @@
 #include "dispatcher.h"
 #include "reader_handler.h"
 #include "../hwc2list/list.h"
+#include "main_fde.h"
 
 #define READER_BUF_DIM  6
 

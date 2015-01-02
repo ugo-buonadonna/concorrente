@@ -14,8 +14,8 @@ provider termina spontaneamente
 */
 
 //funzione per inviare msg nel provider_buffer. Ritorna il num. di messaggi inviati.
-void *send_dispatcher_buf(void* arg) {
-	struct send_dispatcher_buf_params *p = (struct send_dispatcher_buf_params*) arg;
+void *start_provider(void* arg) {
+	struct start_provider_params *p = (struct start_provider_params*) arg;
 
 	int i,count=0;
 	for(i=0;i<p->len;i++) {
@@ -24,7 +24,7 @@ void *send_dispatcher_buf(void* arg) {
 	}
 	if( put_non_bloccante(p->provider_buffer,POISON_PILL)!= BUFFER_ERROR)
 		count++;
-	//printf("Provider sent %d messages",count);
+	printf("-Provider poisoned-");
 	void* thread_return_value = (void*)count;
 	return thread_return_value;
 }

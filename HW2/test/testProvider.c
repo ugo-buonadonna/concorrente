@@ -10,8 +10,8 @@
 
 msg_t** msgs;
 buffer_t* provider_buffer;
-struct send_dispatcher_buf_params sdbp;
-pthread_t thread1;
+struct start_provider_params sdbp;
+pthread_t reader;
 
 void init_providerUnMessaggio(void)  {
 	msgs = init_msgs(1);
@@ -27,8 +27,8 @@ void clean_providerUnMessaggio(void)  {
 void test_providerUnMessaggio(void) {
 	init_providerUnMessaggio();
 
-	pthread_create(&thread1,NULL,send_dispatcher_buf,&sdbp);
-	pthread_join(thread1,NULL);
+	pthread_create(&reader,NULL,start_provider,&sdbp);
+	pthread_join(reader,NULL);
 
 	//verifico che abbia spedito 2 messaggi, di cui l'ultimo poison pill
 	CU_ASSERT_EQUAL(provider_buffer->msg_array[0],msgs[0]);
@@ -52,8 +52,8 @@ void clean_providerDueMessaggi(void)  {
 void test_providerDueMessaggi(void) {
 	init_providerDueMessaggi();
 
-	pthread_create(&thread1,NULL,send_dispatcher_buf,&sdbp);
-	pthread_join(thread1,NULL);
+	pthread_create(&reader,NULL,start_provider,&sdbp);
+	pthread_join(reader,NULL);
 
 	//verifico che abbia spedito 3 messaggi, di cui l'ultimo poison pill
 	CU_ASSERT_EQUAL(provider_buffer->msg_array[0],msgs[0]);

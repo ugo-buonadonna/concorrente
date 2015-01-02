@@ -20,4 +20,6 @@ extern condvar_t *reader_handler_started;
 
 void test_start_accepter_creazione1Reader(void);
 void test_start_accepter_creazione2Reader(void) ;
+void test_submit_request_2reader(void);
+void test_submit_request_1reader(void);
 #endif /* MAIN_HW2_TEST_TESTACCEPTER_H_ */

@@ -13,6 +13,10 @@
 #include "../../HW1/src/types.h"
 #include "../src/types.h"
 
+extern condvar_t *reader_handler_started;
+
 void test_start_dispatcher_1msg1reader(void);
+void test_start_dispatcher_2msg1reader(void);
+
 
 #endif /* MAIN_HW2_TEST_TESTDISPATCHER_H_ */

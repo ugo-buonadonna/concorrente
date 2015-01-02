@@ -43,7 +43,7 @@ int start_reader_handler(void* reader_list) {
 		fprintf (stderr, "Errore di concorrenza: rimozione di elemento inesistente");
 	destroy_reader_fde(this_reader);
 
-	//Segnalo che sto per uscire, quindi la distruzione
+	//Segnalo che sto per uscire, quindi l'eventuale distruzione
 	//della coda di liste è ora safe
 	if(reader_handler_started != NULL)
 		inc_flag(reader_handler_started);

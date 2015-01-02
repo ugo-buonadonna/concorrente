@@ -37,6 +37,6 @@ int start_reader(buffer_t* reader_buffer) {
 		count++;
 		sleep((rand() % 2500) / 1000); //Elemento di variabilità temporale (tra 0 e 2.5 secondi)
 	}
-	printf("Reader got poison pill... terminating");
+	printf("-Reader poisoned-");
 	return count;
 }

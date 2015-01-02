@@ -26,3 +26,21 @@ void msg_destroy_string(msg_t* msg) {
 msg_t* msg_copy_string(msg_t* msg) {
 	return msg->msg_init(msg_init_string( msg->content ));
 }
+
+//funzioni per inizializzare e rilasciare un array di messaggi predefiniti
+msg_t** init_msgs(int num) {
+	msg_t** msgs = (msg_t**) malloc(sizeof(msg_t*) * num);
+	char msg_content[15];
+	int i;
+	for(i=0;i<num;i++) {
+		sprintf(msg_content, "Messaggio%d", i);
+		msgs[i] = msg_init_string(msg_content);
+	}
+	return msgs;
+}
+void free_msgs(msg_t** msgs,int num) {
+	int i;
+	for(i=0;i<num;i++)
+		msg_destroy_string(msgs[i]);
+	free(msgs);
+}

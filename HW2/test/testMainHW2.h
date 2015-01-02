@@ -18,6 +18,7 @@
 #include "testAccepter.h"
 #include "testDispatcher.h"
 #include "testReaderHandler.h"
+#include "testMainFDE.h"
 
 const char* callTestsHW2(void);
 

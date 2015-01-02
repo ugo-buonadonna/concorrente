@@ -12,7 +12,7 @@
 msg_t** msgs;
 buffer_t* reader_buffer;
 s_list* reader_list;
-pthread_t thread1;
+pthread_t reader;
 
 //Testo solamente la funzione core del reader, escludendo quindi
 //il reader_handler
@@ -30,8 +30,8 @@ void test_start_reader_1reader1Messaggio(void) {
 	init_start_reader_1reader1Messaggio();
 
 	void* num_letti;
-	pthread_create(&thread1,NULL,start_reader,(buffer_t*)reader_buffer);
-	pthread_join(thread1,&num_letti);
+	pthread_create(&reader,NULL,start_reader,(buffer_t*)reader_buffer);
+	pthread_join(reader,&num_letti);
 	//verifico che abbia letto 1 messaggio, esclusa la poison pill
 	CU_ASSERT_EQUAL((int)num_letti,1);
 

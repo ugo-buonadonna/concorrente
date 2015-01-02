@@ -9,10 +9,12 @@
 
 condvar_t * condvar_init(int flag) {
 	condvar_t* new_condvar = (condvar_t*) malloc(sizeof(condvar_t));
+	 pthread_mutexattr_t Attr;
 
-
+	 pthread_mutexattr_init(&Attr);
+	 pthread_mutexattr_settype(&Attr, PTHREAD_MUTEX_ERRORCHECK);
 	// Inizializza mutex associato a variabile condizione
-	assert( pthread_mutex_init(&(new_condvar->flag_mutex), NULL) == 0);
+	assert( pthread_mutex_init(&(new_condvar->flag_mutex), &Attr) == 0);
 
 	// Inizializza variabile condizione associata a flag
 	assert(pthread_cond_init(&(new_condvar->flag_cv), NULL) == 0);
@@ -32,7 +34,7 @@ void set_flag (condvar_t * condvar,int flag_value) {
 	// Lock del mutex su flag
 	int res;
 	//printf("set_flag tid: %d",pthread_self());
-	if( (res = pthread_mutex_trylock (&(condvar->flag_mutex))) != 0)
+	if( (res = pthread_mutex_lock (&(condvar->flag_mutex))) != 0)
 		printf("Unable to lock mutex in set_flag: %d",res);
 
 	// cambia il valore del flag
@@ -50,8 +52,8 @@ void inc_flag (condvar_t * condvar) {
 	// Lock del mutex su flag
 	int res;
 	//printf("set_flag tid: %d",pthread_self());
-	if( (res = pthread_mutex_trylock (&(condvar->flag_mutex))) != 0)
-		printf("Unable to lock mutex in set_flag: %d",res);
+	if( (res = pthread_mutex_lock (&(condvar->flag_mutex))) != 0)
+		printf("Unable to lock mutex in inc_flag: %d",res);
 
 	// cambia il valore del flag
 	condvar->flag++;

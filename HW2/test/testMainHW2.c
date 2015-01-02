@@ -21,23 +21,6 @@ int clean_suite_hwc2(void) {
 
 
 //Funzioni ausiliarie utilizzate nelle inizalizzazioni dei test
-msg_t** init_msgs(int num) {
-	msg_t** msgs = (msg_t**) malloc(sizeof(msg_t*) * num);
-	char msg_content[15];
-	int i;
-	for(i=0;i<num;i++) {
-		sprintf(msg_content, "Messaggio%d", i);
-		msgs[i] = msg_init_string(msg_content);
-	}
-	return msgs;
-}
-void free_msgs(msg_t** msgs,int num) {
-	int i;
-	for(i=0;i<num;i++)
-		msg_destroy_string(msgs[i]);
-	free(msgs);
-}
-
 void wait_readers_termination(s_list* reader_list,int thread_number) {
 	iterator_t *reader_list_iterator = iterator_init(reader_list->list);
 	copy_and_send_to_all(1, reader_list_iterator, POISON_PILL);
@@ -105,17 +88,29 @@ const char* callTestsHWC2() {
 	CU_add_test(hwc2_suite, "gestore del reader, inserimento in lista di 2 reader",
 			test_startReaderHandler_inserimentoLista2reader);
 
-
-
 	//ACCEPTER
 	CU_add_test(hwc2_suite, "creazione di 1 reader da parte di 1 Accepter",
 			test_start_accepter_creazione1Reader);
 	CU_add_test(hwc2_suite, "creazione di 2 reader da parte di 1 Accepter",
 			test_start_accepter_creazione2Reader);
+	CU_add_test(hwc2_suite, "creazione di 1 reader tramite submit_request",
+			test_submit_request_1reader);
+	CU_add_test(hwc2_suite, "creazione di 2 reader tramite submit_request",
+			test_submit_request_2reader);
 
 	//DISPATCHER
 	CU_add_test(hwc2_suite, "dispatching di 1 messaggio ad 1 reader",
 			test_start_dispatcher_1msg1reader);
+	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader",
+				test_start_dispatcher_2msg1reader);
+
+	//FLUSSO PRINCIPALE
+	CU_add_test(hwc2_suite, "invio poison pill all'accepter dopo terminazione provider",
+			test_start_all_1ppillToAccepter);
+	CU_add_test(hwc2_suite, "creazione di 1 reader a partire dal sistema di flussi",
+			test_start_all_creazione1reader);
+	CU_add_test(hwc2_suite, "esecuzione intera flusso main con 1 poison pill da provider e 0 readers",
+			test_start_all_1ppill0readers);
 
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	CU_basic_run_tests();
