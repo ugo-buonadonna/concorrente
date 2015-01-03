@@ -15,11 +15,11 @@ struct start_dispatcher_args {
 	s_list* current_readers;
 };
 
-struct get_bloccante_params {
+struct put_bloccante_params {
 	buffer_t* buffer;
 	msg_t* message;
 };
 void* start_dispatcher(void* args);
-int copy_and_send_to_all(int , iterator_t* , msg_t* );
+int copy_and_send_to_all(s_list* reader_list, msg_t* current);
 
 #endif /* MAIN_HW2_SRC_DISPATCHER_H_ */

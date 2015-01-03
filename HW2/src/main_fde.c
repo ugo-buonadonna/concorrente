@@ -71,10 +71,7 @@ void* start_main_fde (void* arg) {
 	pthread_join(accepter,NULL);
 
 	lock_list(main->current_readers);
-	iterator_t* it = iterator_init(main->current_readers->list);
-	int count = copy_and_send_to_all(1,it,POISON_PILL);
-
-	iterator_destroy(it);
+	int count = copy_and_send_to_all(main->current_readers,POISON_PILL);
 	unlock_list(main->current_readers);
 
 	printf("-main_fde terminating-");

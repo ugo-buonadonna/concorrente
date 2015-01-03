@@ -40,7 +40,7 @@ int start_reader(buffer_t* reader_buffer) {
 		count++;
 		tim.tv_sec = 1;
 		tim.tv_nsec = (rand() % 1000) * NANO_SECOND_MULTIPLIER ;
-		nanosleep(&tim , &tim2);//Elemento di variabilità temporale (tra 0 e 2 sec.)
+		//nanosleep(&tim , &tim2);//Elemento di variabilità temporale (tra 0 e 2 sec.)
 	}
 	printf("-Reader poisoned-");
 	return count;

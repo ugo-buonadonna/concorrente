@@ -13,40 +13,51 @@
 //in modo bloccante POISON_PILL a reader giudicati lenti,
 //in modo da non influenzare la velocità del dispatcher
 void* wrapper_put_bloccante(void* args){
-	struct get_bloccante_params* p = (struct get_bloccante_params*)args;
-	return (void*)put_bloccante(p->buffer,p->message);
+	printf("Executing put bloccante");
+	struct put_bloccante_params* p = (struct put_bloccante_params*)args;
+	msg_t* ret_value = put_bloccante(p->buffer,p->message);
+	free(args);
+	return (void*)ret_value;
+
 }
 
-void send_detached_ppill(struct get_bloccante_params* arg) {
+void send_detached_ppill(buffer_t* buffer) {
+	struct put_bloccante_params *p = (struct put_bloccante_params*)malloc(sizeof(struct put_bloccante_params));
+	p->buffer = buffer;
+	p->message = msg_copy_pill(POISON_PILL);
 	pthread_t reader;
 	pthread_attr_t attr;
 	pthread_attr_init (&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-	pthread_create(&reader,&attr,wrapper_put_bloccante,arg);
+	pthread_create(&reader,&attr,wrapper_put_bloccante,p);
 	pthread_attr_destroy (&attr);
+
 }
 
-int copy_and_send_to_all(int is_poison_pill, iterator_t* it, msg_t* current) {
+
+int copy_and_send_to_all(s_list* reader_list, msg_t* current) {
 	int slow_readers=0;
+	iterator_t* it = iterator_init(reader_list->list);
 	while (hasNext(it)) {
 		msg_t* to_send;
-		if (!is_poison_pill)
-			to_send = msg_copy_string(current);
-		else
+		if (to_send == POISON_PILL)
 			to_send = msg_copy_pill(current);
+		else
+			to_send = msg_copy_string(current);
 
 		reader_fde* reader = (reader_fde*) next(it);
 		if(put_non_bloccante(reader->reader_buffer, to_send) == BUFFER_ERROR) {
 			//Siamo in presenza di un reader troppo lento, quindi mando una POISON_PILL
-			//in maniera non bloccante
-			printf("WEEEEEEEE");
+			//in maniera bloccante con un thread a parte. Contemporaneamente
+			//rimuovo il reader dalla lista, altrimenti rimanderò ancora
+			//poison pills
+			printf("Trovato un reader lento");
 			slow_readers++;
-			struct get_bloccante_params* p;
-			p->buffer = reader->reader_buffer;
-			p->message = POISON_PILL;
-			send_detached_ppill(&p);
+			send_detached_ppill(reader->reader_buffer);
+			removeElement(reader_list->list,reader);
 		}
 	}
+	iterator_destroy(it);
 	return slow_readers;
 }
 
@@ -61,9 +72,7 @@ void *start_dispatcher(void* args) {
 		current = get_bloccante(buffer);
 		is_poison_pill = current == POISON_PILL;
 		lock_list(readers);
-		iterator_t* it = iterator_init(readers->list);
-		slow_readers = copy_and_send_to_all(is_poison_pill, it, current);
-		iterator_destroy(it);
+		slow_readers = copy_and_send_to_all(readers, current);
 		unlock_list(readers);
 	} while(!is_poison_pill);
 	printf("-Dispatcher poisoned-");

@@ -18,7 +18,8 @@ s_list* safe_list_init(void) {
 }
 
 void safe_list_destroy(s_list* list) {
-	pthread_mutex_destroy(&(list->uso_list));
+	if(pthread_mutex_destroy(&(list->uso_list)))
+		perror("Error while destroying mutex!");
 	list_destroy(list->list);
 	free(list);
 }
