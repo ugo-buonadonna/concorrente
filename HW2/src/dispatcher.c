@@ -40,7 +40,7 @@ int copy_and_send_to_all(s_list* reader_list, msg_t* current) {
 	iterator_t* it = iterator_init(reader_list->list);
 	while (hasNext(it)) {
 		msg_t* to_send;
-		if (to_send == POISON_PILL)
+		if (current == POISON_PILL)
 			to_send = msg_copy_pill(current);
 		else
 			to_send = msg_copy_string(current);

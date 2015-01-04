@@ -63,7 +63,7 @@ const char* callTestsHWC2() {
 	CU_initialize_registry();
 	hwc2_suite = CU_add_suite("hwc2 Testing", init_suite_hwc2,
 			clean_suite_hwc2);
-	/*
+
 	//PROVIDER
 	CU_add_test(hwc2_suite, "spedizione di 1 messaggio da parte di un provider",
 			test_providerUnMessaggio);
@@ -100,17 +100,17 @@ const char* callTestsHWC2() {
 	CU_add_test(hwc2_suite, "dispatching di 1 messaggio ad 1 reader",
 			test_start_dispatcher_1msg1reader);
 	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader",
-				test_start_dispatcher_2msg1reader);*/
+				test_start_dispatcher_2msg1reader);
 	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader Lento",
 			test_start_dispatcher_1readerLento_2messaggi);
-/*
+
 	//FLUSSO PRINCIPALE
 	CU_add_test(hwc2_suite, "invio poison pill all'accepter dopo terminazione provider",
 			test_start_all_1ppillToAccepter);
 	CU_add_test(hwc2_suite, "creazione di 1 reader a partire dal sistema di flussi",
 			test_start_all_creazione1reader);
 	CU_add_test(hwc2_suite, "esecuzione intera flusso main con 1 poison pill da provider e 0 readers",
-			test_start_all_1ppill0readers);*/
+			test_start_all_1ppill0readers);
 
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	CU_basic_run_tests();

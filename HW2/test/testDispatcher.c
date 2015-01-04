@@ -14,6 +14,7 @@ s_list* reader_list;
 pthread_t reader;
 void* msgs_read;
 
+
 struct start_dispatcher_args sda;
 
 
@@ -127,9 +128,10 @@ void test_start_dispatcher_1readerLento_2messaggi(void) {
 	sleep(1);
 	//sollecitazione
 	int slow_readers = start_dispatcher(&sda);
-	//verifico che il dispatcher abbia trovato 1 reader lento
-	printf("\n\t%d\n",slow_readers);
-	CU_ASSERT_EQUAL(slow_readers,1);
+	//verifico che il dispatcher abbia
+	//eliminato dalla lista il reader lento
+	//Altra violazione di progresso finito
+	CU_ASSERT_EQUAL(size(reader_list->list),0);
 
 	clean_start_dispatcher_1readerLento_2messaggi();
 }
