@@ -24,7 +24,6 @@
 
 int main()
 {
-	//printf(callTestsHWC1());
 	char* res = callTestsHWC2();
 	printf(res);
 

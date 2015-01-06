@@ -16,5 +16,6 @@
 #include <CUnit/Basic.h>
 
 void test_start_reader_1reader1Messaggio(void);
+void test_start_reader_1reader2Messaggio(void);
 
 #endif

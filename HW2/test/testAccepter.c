@@ -7,7 +7,7 @@
 
 #include "testAccepter.h"
 
-pthread_t reader;
+pthread_t reader1;
 pthread_t accepter;
 msg_t** msgs;
 buffer_t* accepter_buffer;
@@ -83,7 +83,8 @@ void test_start_accepter_creazione2Reader(void) {
 	//sollecitazione
 	start_accepter(&sap);
 
-	//verifica
+	//verifica(flag = 2 perchè viene incrementato
+	//sia all'inizio che alla terminazione di un reader
 	wait_flag_value(reader_handler_started,2);
 
 	//test passato, reader creato.

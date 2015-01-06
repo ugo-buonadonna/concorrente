@@ -73,6 +73,9 @@ const char* callTestsHWC2() {
 	//READER
 	CU_add_test(hwc2_suite, "funzione core del reader ricevendo 1 messaggio",
 			test_start_reader_1reader1Messaggio);
+	CU_add_test(hwc2_suite, "funzione core del reader ricevendo 2 messaggi",
+			test_start_reader_1reader2Messaggio);
+
 
 	//READER HANDLER
 	CU_add_test(hwc2_suite, "funzione creatrice di reader, creazione di 1 reader",
@@ -81,6 +84,9 @@ const char* callTestsHWC2() {
 				test_createReader_creazione2reader);
 	CU_add_test(hwc2_suite, "gestore del reader, creazione di 1 reader",
 			test_startReaderHandler_creazione1reader);
+	CU_add_test(hwc2_suite, "gestore del reader, creazione di 2 reader",
+			test_startReaderHandler_creazione2reader);
+
 	CU_add_test(hwc2_suite, "gestore del reader, inserimento in lista di 1 reader",
 			test_startReaderHandler_inserimentoLista1reader);
 	CU_add_test(hwc2_suite, "gestore del reader, inserimento in lista di 2 reader",
@@ -101,6 +107,8 @@ const char* callTestsHWC2() {
 			test_start_dispatcher_1msg1reader);
 	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader",
 				test_start_dispatcher_2msg1reader);
+	CU_add_test(hwc2_suite, "dispatching di 2 messaggi a 2 reader",
+					test_start_dispatcher_2msg2reader);
 	CU_add_test(hwc2_suite, "dispatching di 2 messaggi ad 1 reader Lento",
 			test_start_dispatcher_1readerLento_2messaggi);
 
@@ -111,6 +119,8 @@ const char* callTestsHWC2() {
 			test_start_all_creazione1reader);
 	CU_add_test(hwc2_suite, "esecuzione intera flusso main con 1 poison pill da provider e 0 readers",
 			test_start_all_1ppill0readers);
+	CU_add_test(hwc2_suite, "esecuzione intera flusso main con 1 poison pill da provider e 0 readers",
+			test_start_all_1ppill1readers);
 
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	CU_basic_run_tests();

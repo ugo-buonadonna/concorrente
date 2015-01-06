@@ -9,11 +9,10 @@
 
 
 
-//Funzioni per creare un thread detached che invia
-//in modo bloccante POISON_PILL a reader giudicati lenti,
-//in modo da non influenzare la velocità del dispatcher
+//Funzione utilizzata nel thread detached
+//che invia una poison pill in modo bloccante
+//al reader giudicato lento
 void* wrapper_put_bloccante(void* args){
-	printf("Executing put bloccante");
 	struct put_bloccante_params* p = (struct put_bloccante_params*)args;
 	msg_t* ret_value = put_bloccante(p->buffer,p->message);
 	free(args);
@@ -21,6 +20,9 @@ void* wrapper_put_bloccante(void* args){
 
 }
 
+//Funzioni per creare un thread detached che invia
+//in modo bloccante POISON_PILL a reader giudicati lenti,
+//in modo da non influenzare la velocità del dispatcher
 void send_detached_ppill(buffer_t* buffer) {
 	struct put_bloccante_params *p = (struct put_bloccante_params*)malloc(sizeof(struct put_bloccante_params));
 	p->buffer = buffer;
@@ -35,6 +37,9 @@ void send_detached_ppill(buffer_t* buffer) {
 }
 
 
+
+//Funzione per inviare a tutti i reader della lista un messaggio
+//La lista viene bloccata al di fuori di questa funzione
 int copy_and_send_to_all(s_list* reader_list, msg_t* current) {
 	int slow_readers=0;
 	iterator_t* it = iterator_init(reader_list->list);
@@ -61,6 +66,7 @@ int copy_and_send_to_all(s_list* reader_list, msg_t* current) {
 	return slow_readers;
 }
 
+//Funzione che funge da dispatcher
 void *start_dispatcher(void* args) {
 	struct start_dispatcher_args *p = (struct start_dispatcher_args*) args;
 	s_list* readers = p->current_readers;
@@ -68,6 +74,8 @@ void *start_dispatcher(void* args) {
 	msg_t* current;
 	int is_poison_pill=0;
 	int slow_readers;
+	//Finchè non riceve una poison pill
+	//Invia a tutti il messaggio
 	do {
 		current = get_bloccante(buffer);
 		is_poison_pill = current == POISON_PILL;

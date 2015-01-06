@@ -7,10 +7,15 @@
 
 #include "reader_handler.h"
 
+
+//Reader Handler è un'entità che gestisce il ciclo di vita di un reader
+//in modo che non appena un reader termina, esso lo rimuove dalla lista
+//dei readers
+
+
 //Creo un thread che si occupa della gestione di un reader.
 //Ha la responsabilità di aggiungere alla coda il reader,
 //nonchè rimuoverlo e deallocarlo una volta terminato.
-//
 void create_reader(void* reader_list) {
 	pthread_t reader;
 	pthread_attr_t attr;

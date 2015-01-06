@@ -14,7 +14,8 @@
 
 //soluzione molto conservativa: se io sto usando la lista per qualsiasi cosa,
 //nessun altro la deve usare. La gestione dei lock sul mutex
-//è responsabilità di chi la utilizza
+//è responsabilità di chi la utilizza. Il grado di parallelismo
+//è nullo, ma ho optato per la soluzione più semplice
 typedef struct safe_list{
 	list_t* list;
 	pthread_mutex_t  uso_list;

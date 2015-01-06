@@ -65,11 +65,13 @@ void* start_main_fde (void* arg) {
 	pthread_join(provider,NULL);
 	//il provider è terminato, invio poison_pill ad accepter
 	if(put_bloccante(main->accepter_buffer,POISON_PILL) == POISON_PILL)
+		//Incremento un flag per il controllo del flusso totale
 		inc_flag(main->test_signal);
 
 	pthread_join(dispatcher,NULL);
 	pthread_join(accepter,NULL);
 
+	//Invio poison pill ai reader rimasti
 	lock_list(main->current_readers);
 	int count = copy_and_send_to_all(main->current_readers,POISON_PILL);
 	unlock_list(main->current_readers);

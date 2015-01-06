@@ -19,6 +19,7 @@
 extern condvar_t *reader_handler_started;
 
 void test_startReaderHandler_creazione1reader(void);
+void test_startReaderHandler_creazione2reader(void);
 void test_startReaderHandler_inserimentoLista1reader(void);
 void test_startReaderHandler_inserimentoLista2reader(void);
 void test_createReader_creazione1reader(void);

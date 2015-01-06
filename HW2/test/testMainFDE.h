@@ -16,6 +16,7 @@
 extern condvar_t *reader_handler_started;
 
 void test_start_all_1ppill0readers(void);
+void test_start_all_1ppill1readers(void);
 void test_start_all_creazione1reader(void);
 void test_start_all_1ppillToAccepter(void);
 

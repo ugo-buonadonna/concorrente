@@ -1,4 +1,16 @@
-All' interno del file 'test/testmain.c' , nella funzione callTests() alla fine del file, sono riportate tutte le funzioni di test con annessa descrizione testuale.
-Tutti i tipi sono dichiarati nella cartella src. è presente anche un tipo 'condvar' che modella variabili condizione che ho utilizzato per sinronizzare thread.
-All'inizio di ogni funzione di test c'è una chiamata alla funzione init_suite_hwc1() che serve a reinizializzare tutte le variabili. Ho preferito inizializzare tutto al di fuori delle funzioni di testing vere e proprie per renderle più snelle e leggibili. Sono consapevole che non dealloco le variabili "vecchie" prima di inizializzarne altre.
-Per ultimo, all'interno di test_getBloccanteBufferInizialmenteVuoto() è presente una sleep() per forzare una seq. di interleaving violando la condizione di progresso finito. 
+Compilazione: 'make all' all'interno della cartella Make. Il file eseguibile sarà 'HWC'
+
+Nel file "HW2/main.c" c'è una chiamata alla funzione presente alla fine del file testMainHW2.c,
+dove c'è la definizione della suite di testing.
+Ogni file nella cartella test contiene tutti i test relativi al particolare flusso in oggetto.
+
+Riguardo i test case, ogni test case ha una propia fixture. Chiama all'inizio una funzione di init
+e alla fine una funzione di clean, nella speranza di snellire il più possibile il test vero e proprio.
+Non ho commentato le funzioni di init e clean poichè non le ho ritenute importanti 
+tanto quanto il codice di sollecitazione vero e proprio.
+
+Sono presenti violazioni di assunzione di progresso finito nei test opportunamente segnalate.
+
+Ho scelto di creare un tipo di dato apposito solamente per i flussi Reader e il flusso Main.
+L'implementazione delle liste thread-safe è molto conservativa ed ha un grado di parallelismo 
+nullo, ma ho voluto optare per la soluzione più semplice possibile.

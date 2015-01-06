@@ -11,8 +11,10 @@ msg_t** msgs;
 buffer_t* provider_buffer;
 buffer_t* reader_buffer;
 s_list* reader_list;
-pthread_t reader;
-void* msgs_read;
+pthread_t reader1;
+pthread_t reader2;
+void* msgs_read1;
+void* msgs_read2;
 
 
 struct start_dispatcher_args sda;
@@ -70,7 +72,7 @@ void init_start_dispatcher_1msg1reader(void)  {
 	reader_handler_started = condvar_init(0);
 	put_bloccante(provider_buffer,msgs[0]);
 	put_bloccante(provider_buffer,POISON_PILL);
-	pthread_create(&reader,NULL,start_reader_handler,(void*)reader_list);
+	pthread_create(&reader1,NULL,start_reader_handler,(void*)reader_list);
 	wait_flag_change(reader_handler_started);
 	sda.current_readers = reader_list;
 	sda.provider_buffer = provider_buffer;
@@ -88,10 +90,10 @@ void test_start_dispatcher_1msg1reader(void) {
 
 	//sollecitazione
 	start_dispatcher(&sda);
-	pthread_join(reader,&msgs_read);
+	pthread_join(reader1,&msgs_read1);
 
 	//verifico che il reader abbia letto 1 messaggio (esclusa ppill)
-	CU_ASSERT_EQUAL((int)msgs_read,1);
+	CU_ASSERT_EQUAL((int)msgs_read1,1);
 
 	clean_start_dispatcher_1msg1reader();
 }
@@ -152,7 +154,7 @@ void init_start_dispatcher_2msg1reader(void)  {
 	put_bloccante(provider_buffer,msgs[0]);
 	put_bloccante(provider_buffer,msgs[1]);
 	put_bloccante(provider_buffer,POISON_PILL);
-	pthread_create(&reader,NULL,start_reader_handler,reader_list);
+	pthread_create(&reader1,NULL,start_reader_handler,reader_list);
 	wait_flag_change(reader_handler_started);
 	sda.current_readers = reader_list;
 	sda.provider_buffer = provider_buffer;
@@ -170,27 +172,15 @@ void test_start_dispatcher_2msg1reader(void) {
 
 	//sollecitazione
 	start_dispatcher(&sda);
-	pthread_join(reader,&msgs_read);
+	pthread_join(reader1,&msgs_read1);
 
 	//verifico che il reader abbia letto 2 messaggi (esclusa ppill)
-	CU_ASSERT_EQUAL((int)msgs_read,2);
+	CU_ASSERT_EQUAL((int)msgs_read1,2);
 
 	clean_start_dispatcher_2msg1reader();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-void init_start_dispatcher_1readerLento(void)  {
+void init_start_dispatcher_2msg2reader(void)  {
 	provider_buffer = buffer_init(3);
 	msgs = init_msgs(2);
 	reader_list = safe_list_init();
@@ -198,29 +188,31 @@ void init_start_dispatcher_1readerLento(void)  {
 	put_bloccante(provider_buffer,msgs[0]);
 	put_bloccante(provider_buffer,msgs[1]);
 	put_bloccante(provider_buffer,POISON_PILL);
-	pthread_create(&reader,NULL,start_reader_handler,reader_list);
-	wait_flag_change(reader_handler_started);
+	pthread_create(&reader1,NULL,start_reader_handler,reader_list);
+	pthread_create(&reader2,NULL,start_reader_handler,reader_list);
+	wait_flag_value(reader_handler_started,2);
 	sda.current_readers = reader_list;
 	sda.provider_buffer = provider_buffer;
 
 }
-void clean_start_dispatcher_1readerLento(void)  {
+void clean_start_dispatcher_2msg2reader(void)  {
 	condvar_destroy(reader_handler_started);
 	reader_handler_started = NULL;
 	buffer_destroy(provider_buffer);
 	safe_list_destroy(reader_list);
 	free_msgs(msgs,2);
 }
-void test_start_dispatcher_1readerLento(void) {
-	init_start_dispatcher_1readerLento();
+void test_start_dispatcher_2msg2reader(void) {
+	init_start_dispatcher_2msg2reader();
 
 	//sollecitazione
 	start_dispatcher(&sda);
-	pthread_join(reader,&msgs_read);
+	pthread_join(reader1,&msgs_read1);
+	pthread_join(reader2,&msgs_read2);
 
-	//verifico che il reader abbia letto 2 messaggi (esclusa ppill)
-	CU_ASSERT_EQUAL((int)msgs_read,2);
+	//verifico che i reader abbiano letto 2 messaggi (esclusa ppill)
+	CU_ASSERT_EQUAL((int)msgs_read1,2);
+	CU_ASSERT_EQUAL((int)msgs_read1,2);
 
-	clean_start_dispatcher_1readerLento();
+	clean_start_dispatcher_2msg2reader();
 }
-

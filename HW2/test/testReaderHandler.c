@@ -10,7 +10,8 @@
 msg_t** msgs;
 buffer_t* reader_buffer;
 s_list* reader_list;
-pthread_t reader;
+pthread_t reader1;
+pthread_t reader2;
 pthread_t thread2;
 iterator_t* reader_list_iterator;
 
@@ -20,7 +21,7 @@ void init_startReaderHandler_creazione1reader(void)  {
 }
 void clean_startReaderHandler_creazione1reader(void)  {
 	wait_readers_termination(reader_list,1);
-	pthread_join(reader,NULL);
+	pthread_join(reader1,NULL);
 	safe_list_destroy(reader_list);
 	condvar_destroy(reader_handler_started);
 	reader_handler_started = NULL;
@@ -29,7 +30,7 @@ void test_startReaderHandler_creazione1reader(void) {
 	init_startReaderHandler_creazione1reader();
 
 	//sollecitazione
-	pthread_create(&reader,NULL,start_reader_handler,(void*)reader_list);
+	pthread_create(&reader1,NULL,start_reader_handler,(void*)reader_list);
 
 	wait_flag_change(reader_handler_started);
 
@@ -40,13 +41,40 @@ void test_startReaderHandler_creazione1reader(void) {
 }
 
 
+void init_startReaderHandler_creazione2reader(void)  {
+	reader_list = safe_list_init();
+	reader_handler_started =  condvar_init(0);
+}
+void clean_startReaderHandler_creazione2reader(void)  {
+	wait_readers_termination(reader_list,2);
+	pthread_join(reader1,NULL);
+	pthread_join(reader2,NULL);
+	safe_list_destroy(reader_list);
+	condvar_destroy(reader_handler_started);
+	reader_handler_started = NULL;
+}
+void test_startReaderHandler_creazione2reader(void) {
+	init_startReaderHandler_creazione2reader();
+
+	//sollecitazione
+	pthread_create(&reader1,NULL,start_reader_handler,(void*)reader_list);
+	pthread_create(&reader2,NULL,start_reader_handler,(void*)reader_list);
+
+	wait_flag_value(reader_handler_started,2);
+
+	//A questo punto il test è già passato
+	CU_PASS();
+
+	clean_startReaderHandler_creazione2reader();
+}
+
 void init_startReaderHandler_inserimentoLista1reader(void)  {
 	reader_list = safe_list_init();
 	reader_handler_started =  condvar_init(0);
 }
 void clean_startReaderHandler_inserimentoLista1reader(void)  {
 	wait_readers_termination(reader_list,1);
-	pthread_join(reader,NULL);
+	pthread_join(reader1,NULL);
 	safe_list_destroy(reader_list);
 	condvar_destroy(reader_handler_started);
 	reader_handler_started = NULL;
@@ -56,7 +84,7 @@ void test_startReaderHandler_inserimentoLista1reader(void) {
 	init_startReaderHandler_creazione1reader();
 
 	//sollecitazione
-	pthread_create(&reader,NULL,start_reader_handler,(void*)reader_list);
+	pthread_create(&reader1,NULL,start_reader_handler,(void*)reader_list);
 
 	//Verifica (size non thread safe ma per scopi di testing).
 	wait_flag_change(reader_handler_started);
@@ -72,7 +100,7 @@ void init_startReaderHandler_inserimentoLista2reader(void)  {
 void clean_startReaderHandler_inserimentoLista2reader(void)  {
 	wait_readers_termination(reader_list,2);
 	//UNABLE TO LOCK MUTEX 16
-	pthread_join(reader,NULL);
+	pthread_join(reader1,NULL);
 	pthread_join(thread2,NULL);
 	safe_list_destroy(reader_list);
 	condvar_destroy(reader_handler_started);
@@ -83,7 +111,7 @@ void test_startReaderHandler_inserimentoLista2reader(void) {
 	init_startReaderHandler_inserimentoLista2reader();
 
 	//sollecitazione
-	pthread_create(&reader,NULL,start_reader_handler,(void*)reader_list);
+	pthread_create(&reader1,NULL,start_reader_handler,(void*)reader_list);
 	pthread_create(&thread2,NULL,start_reader_handler,(void*)reader_list);
 
 	//Verifica (size non thread safe ma per scopi di testing).

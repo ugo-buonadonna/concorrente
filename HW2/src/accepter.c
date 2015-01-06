@@ -14,12 +14,11 @@ void *start_accepter(void* args) {
 	while ((current = get_bloccante(p->accepter_buffer)) != POISON_PILL) {
 		create_reader(p->current_readers);
 	}
-	//printf("\n%p || %p\n",current,POISON_PILL);
-	//received poison pill
 	printf("-Accepter poisoned-");
 	return NULL;
 }
 
+//Una richiesta è un messaggio con contenuto = stringa passata per parametro
 void submit_request(buffer_t* requests, char name[]) {
 	put_bloccante(requests,msg_init_string(name));
 }

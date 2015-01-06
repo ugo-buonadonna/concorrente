@@ -7,6 +7,8 @@
 
 #include "safe_list.h"
 
+//Funzioni per gestire una lista
+//in modo thread safe.
 s_list* safe_list_init(void) {
 	s_list* new_list = (s_list*)malloc(sizeof(s_list));
 	new_list->list = list_init();
